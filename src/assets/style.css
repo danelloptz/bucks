@@ -7,3 +7,15 @@
     font-family: 'OpenSans';
     src: url('fonts/OpenSans.ttf');
 }
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 1000px #14152E inset !important;
+    box-shadow: 0 0 0 1000px #14152E inset !important;
+
+    -webkit-text-fill-color: rgba(255, 255, 255, 0.5) !important;
+    caret-color: white;
+    transition: background-color 9999s ease-in-out 0s;
+}

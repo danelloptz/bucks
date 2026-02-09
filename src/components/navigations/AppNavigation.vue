@@ -5,7 +5,7 @@
             :key="index"
             class="item"
             @click="setItem(index)"
-            :class="{ active: activeIndex}"
+            :class="{ active: activeIndex == index}"
         >
             <img :src="item.icon" class="icon" />
             <span class="title">{{ item.label }}</span>
@@ -72,6 +72,10 @@
         display: flex;
         align-items: center;
         column-gap: 10px;
+        padding: 6px 10px;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: .1s ease-in;
     }
 
     .icon {
@@ -87,6 +91,6 @@
     }
 
     .active {
-        background: blue;
+        background: #0059FF;
     }
 </style>

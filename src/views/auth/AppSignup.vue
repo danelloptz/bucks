@@ -95,13 +95,6 @@
                 }
             },
             async getReferer() {
-                // this.referrer = {
-                //     avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTw65CdYNW5DUBZzRKFNIM2dXEr0JoihVpDEw&s',
-                //     name: 'Ватлин Анатолий Петрович',
-                //     tariff: 'Silver',
-                //     id: 842052594
-                // };
-                
                 const referer_reponse = await getReferralInfo(this.code);
                 if (referer_reponse) {
                     this.referrer = referer_reponse;

@@ -2,25 +2,30 @@
     <div
         class="lang"
         ref="lang"
+        :class="{ lang_mini: mini }"
     >
-        <img
-            src="@/assets/images/globe.png"
-            class="globe"
-            alt="Language"
-            @click="toggle"
-        />
+        <div class="lang_wrapper">
+            <img
+                src="@/assets/images/globe.png"
+                class="globe"
+                :class="{ mini_globe: mini }"
+                alt="Language"
+                @click="toggle"
+            />
 
-        <span
-            class="current-lang"
-            @click="toggle"
-        >
-            {{ currentLang }}
-        </span>
-
+            <span
+                class="current-lang"
+                @click="toggle"
+                :class="{ mini_text: mini }"
+            >
+                {{ currentLang }}
+            </span>
+        </div>
+        
         <img
             src="@/assets/images/dropdown.png"
             class="arrow"
-            :class="{ open: isOpen }"
+            :class="{ open: isOpen, mini_arrow: mini }"
             @click="toggle"
         />
 
@@ -32,6 +37,8 @@
                 v-for="lang in langs"
                 :key="lang"
                 @click="selectLang(lang)"
+                class="dropdown_item"
+                :class="{ mini_text: mini }"
             >
                 {{ lang }}
             </li>
@@ -42,6 +49,9 @@
 
 <script>
 export default {
+    props: {
+        mini: Boolean
+    },
     data() {
         return {
             langs: [
@@ -90,13 +100,33 @@ export default {
         cursor: pointer;
     }
 
+    .lang_mini {
+        width: 100%;
+        background: #394175;
+        padding: 10px;
+        justify-content: space-between;
+        border-radius: 10px;
+    }
+
+    .lang_wrapper {
+        display: flex;
+        column-gap: 10px;
+        align-items: center;
+    }
+
     .globe {
         width: 30px;
         height: 30px;
+        opacity: .6;
         @media (max-width: 520px) {
             width: 19.41px;
             height: 19.41px;
         }
+    }
+
+    .mini_globe {
+        width: 20px;
+        height: 20px;
     }
 
     .arrow {
@@ -105,6 +135,11 @@ export default {
             width: 15.04px;
             height: 8.25px;
         }
+    }
+
+    .mini_arrow {
+        width: 15.5px;
+        height: 8.5px;
     }
 
     /* класс для переворота */
@@ -125,7 +160,7 @@ export default {
         min-width: 140px;
     }
 
-    .dropdown li {
+    .dropdown_item {
         padding: 8px 12px;
         font-size: 24px;
         @media (max-width: 520px) {
@@ -133,7 +168,7 @@ export default {
         }
     }
 
-    .dropdown li:hover {
+    .dropdown_item:hover {
         background: #1a1b3a;
     }
 
@@ -142,5 +177,9 @@ export default {
         @media (max-width: 520px) {
             font-size: 15.52px;
         }
+    }
+
+    .mini_text {
+        font-size: 16px;
     }
 </style>
