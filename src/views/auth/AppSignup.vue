@@ -59,6 +59,10 @@
     import AppButton from '@/components/buttons/AppButton.vue';
     import AppCheckbox from '@/components/inputs/AppCheckbox.vue';
     import AppUserCard from '@/components/cards/AppUserCard.vue';
+
+    import { signUp } from '@/services/auth';
+    import { getReferralInfo } from '@/services/users';
+
     export default {
         components: { AppLangDropdown, AppInput, AppButton, AppCheckbox, AppUserCard },
         data() {
@@ -69,17 +73,39 @@
                 code: null,
                 isCheked: false,
                 referrer: null,
-                error: null
+                error: null,
+            }
+        },
+        mounted() {
+            this.handleUrlParams();
+        },
+        async created() {
+            if (localStorage.getItem('referer')) {
+                this.code = localStorage.getItem('referer');
+                await this.getReferer();
             }
         },
         methods: {
+            handleUrlParams() {
+                const params = new URLSearchParams(window.location.search);
+                const ref = params.get("ref");
+                if (ref) {
+                    localStorage.setItem('referer', ref);
+                    this.code = ref;
+                }
+            },
             async getReferer() {
-                this.referrer = {
-                    avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTw65CdYNW5DUBZzRKFNIM2dXEr0JoihVpDEw&s',
-                    name: 'Ватлин Анатолий Петрович',
-                    tariff: 'Silver',
-                    id: 842052594
-                };
+                // this.referrer = {
+                //     avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTw65CdYNW5DUBZzRKFNIM2dXEr0JoihVpDEw&s',
+                //     name: 'Ватлин Анатолий Петрович',
+                //     tariff: 'Silver',
+                //     id: 842052594
+                // };
+                
+                const referer_reponse = await getReferralInfo(this.code);
+                if (referer_reponse) {
+                    this.referrer = referer_reponse;
+                }
             },
             async signup() {
                 if (this.email.length == 0) {
@@ -99,6 +125,13 @@
                     return;
                 }
                 this.error = null;
+                const signup_response = await signUp(this.email, this.password, this.code);
+                if (signup_response.access_token) {
+                    localStorage.setItem('token', signup_response.access_token);
+                    localStorage.setItem('refresh_token', signup_response.refresh_token);
+                    this.$router.push('/home');
+                }
+
             }
         }
     }

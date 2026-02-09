@@ -29,7 +29,7 @@
         max-width: 450px;
         height: 60px;
         padding-left: 20px;
-        border-radius: 14px;
+        border-radius: 10px;
         border: 1px solid #14152E;
         background: #14152E;
         color: white;
