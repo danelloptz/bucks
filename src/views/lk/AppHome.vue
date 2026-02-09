@@ -1,5 +1,13 @@
 <template>
     <section class="main">
+        <AppAvatarModal 
+            v-if="avatarModal"
+            :avatar="'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR7F-gNQ26Wdle9t9FLbhGwyytfSqbdvYT2lw&s'"
+            :name="'Дмитрий Петренко'"
+            :tariff="'Platinum'"
+            :id="'842052594'"
+            @close="avatarModal = $event"
+        />
         <div class="left">
             <span class="logo">Лого</span>
             <AppNavigation
@@ -9,31 +17,37 @@
             <div class="line"></div>
             <AppLangDropdown :mini="true" class="dropdown_lang" />
 
-            <div class="left_ads">
-                <img 
-                    v-for="(item, index) in left_ads"
-                    :index="index"
-                    :src="item.image" 
-                    class="left_ads_image"
-                    @click="openLink(item.link)"
-                />
-            </div>
+            <AppImageLeftAds :ads="left_ads" />
+            <AppTextAds :ads="text_ads" />
 
-            <div class="left_text_ads">
-                <div 
-                    v-for="(item, index) in text_ads"
-                    :key="index"
-                    class="left_text_ads_item"
-                >
-                    <h3>{{ item.title }}</h3>
-                    <span>{{ item.description }}</span>
-                    <a :href="item.link">{{ item.link }}</a>
-                </div>
-            </div>
             <AppButton class="left_ads_button">Добавить рекламу</AppButton>
         </div>
         <div class="content">
-
+            <div class="header">
+                <AppUserWallet
+                    :label="'Основной счет'"
+                    :cash="10"
+                    :icon="AppMainWallet"
+                    :color="'#0059FF'"
+                />
+                <AppUserWallet
+                    :label="'Реферальный счет'"
+                    :cash="100"
+                    :icon="AppReferalWallet"
+                    :color="'#003BE1'"
+                />
+                <AppUserWallet
+                    :label="'Рекламный счет'"
+                    :cash="1000"
+                    :icon="AppAddWallet"
+                    :color="'#001DC3'"
+                />
+                <img 
+                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR7F-gNQ26Wdle9t9FLbhGwyytfSqbdvYT2lw&s" 
+                    class="header_avatar" 
+                    @click="openAvatar"
+                />
+            </div>
         </div>
     </section>
 </template>
@@ -42,11 +56,19 @@
     import AppNavigation from '@/components/navigations/AppNavigation.vue';
     import AppLangDropdown from '@/components/dropdowns/AppLangDropdown.vue';
     import AppButton from '@/components/buttons/AppButton.vue';
+    import AppImageLeftAds from '@/components/ads/AppImageLeftAds.vue';
+    import AppTextAds from '@/components/ads/AppTextAds.vue';
+    import AppUserWallet from '@/components/cards/AppUserWallet.vue';
+    import AppAvatarModal from '@/components/modals/AppAvatarModal.vue';
+
+    import AppMainWallet from '@/assets/images/main_wallet.png'
+    import AppReferalWallet from '@/assets/images/referal_wallet.png'
+    import AppAddWallet from '@/assets/images/add_wallet.png'
 
     import { getUserInfo } from '@/services/users';
 
     export default {
-        components: { AppNavigation, AppLangDropdown, AppButton },
+        components: { AppNavigation, AppLangDropdown, AppButton, AppImageLeftAds, AppTextAds, AppUserWallet, AppAvatarModal },
         data() {
             return {
                 currentComponent: 0,
@@ -77,7 +99,11 @@
                         description: 'Быстрый заработок на выполнении простых заданий онлайн, не отходя от компьютера',
                         link: 'https://socpublic.com'
                     }
-                ]
+                ],
+                avatarModal: false,
+                AppMainWallet,
+                AppReferalWallet,
+                AppAddWallet
             }
         },
         async created() {
@@ -95,6 +121,9 @@
             }
         },
         methods: {
+            openAvatar() {
+                this.avatarModal = true;
+            },
             openLink(link) {
                 window.location.href = link;
             }
@@ -115,7 +144,7 @@
     .left {
         display: flex;
         flex-direction: column;
-        background: linear-gradient(135deg, #01216E, #040825);
+        background: linear-gradient(135.94deg, #01216E 0%, #040825 98.41%);
         padding: 94px 10px;
         min-height: 100vh;
     }
@@ -203,5 +232,25 @@
         font-size: 16px;
         width: 100%;
         margin-top: 31px;
+    }
+
+    .content {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        padding-top: 57px;
+    }
+
+    .header {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .header_avatar {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        cursor: pointer;
     }
 </style>
