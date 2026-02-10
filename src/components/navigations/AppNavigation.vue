@@ -4,7 +4,7 @@
             v-for="(item, index) in items"
             :key="index"
             class="item"
-            @click="setItem(index)"
+            @click="setItem(index, item)"
             :class="{ active: activeIndex == index}"
         >
             <img :src="item.icon" class="icon" />
@@ -53,9 +53,12 @@
             }
         },
         methods: {
-            setItem(index) {
+            setItem(index, item) {
                 this.activeIndex = index;
-                this.$emit('set_item', index);
+                this.$emit('set_item', {
+                    index: index,
+                    name: item.label
+                });
             }
         }
     };

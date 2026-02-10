@@ -11,7 +11,7 @@
         <div class="left">
             <span class="logo">Лого</span>
             <AppNavigation
-                @set_item="currentComponent = $event"
+                @set_item="setActiveComponent"
                 class="nav"
             />
             <div class="line"></div>
@@ -48,6 +48,8 @@
                     @click="openAvatar"
                 />
             </div>
+            <AppTopPanel :nav="stack" />
+            <AppTeam v-if="currentComponent == 2" />
         </div>
     </section>
 </template>
@@ -60,6 +62,9 @@
     import AppTextAds from '@/components/ads/AppTextAds.vue';
     import AppUserWallet from '@/components/cards/AppUserWallet.vue';
     import AppAvatarModal from '@/components/modals/AppAvatarModal.vue';
+    import AppTopPanel from '@/components/navigations/AppTopPanel.vue';
+
+    import AppTeam from '@/views/lk/team/AppTeam.vue';
 
     import AppMainWallet from '@/assets/images/main_wallet.png'
     import AppReferalWallet from '@/assets/images/referal_wallet.png'
@@ -68,11 +73,12 @@
     import { getUserInfo } from '@/services/users';
 
     export default {
-        components: { AppNavigation, AppLangDropdown, AppButton, AppImageLeftAds, AppTextAds, AppUserWallet, AppAvatarModal },
+        components: { AppNavigation, AppLangDropdown, AppButton, AppImageLeftAds, AppTextAds, AppUserWallet, AppAvatarModal, AppTopPanel, AppTeam },
         data() {
             return {
                 currentComponent: 0,
                 userData: null,
+                stack: [],
                 left_ads: [
                     {
                         image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR39FTbsc8poGH9X56qew1X5l8hxeVCrWgOjQ&s',
@@ -121,6 +127,19 @@
             }
         },
         methods: {
+            addItemStack(item) {
+                this.stack.push(item);
+            },
+            resetStack(name) {
+                this.stack = [];
+                this.stack.push(name);
+                console.log(name);
+            },
+            setActiveComponent(data) {
+                console.log(data);
+                this.currentComponent = data.index;
+                this.resetStack(data.name);
+            },
             openAvatar() {
                 this.avatarModal = true;
             },

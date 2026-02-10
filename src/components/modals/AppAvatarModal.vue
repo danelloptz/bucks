@@ -52,7 +52,7 @@
                     />
                 </div>
 
-                <AppButton class="btn">Выйти</AppButton>
+                <AppButton class="btn" @click="exit">Выйти</AppButton>
             </div>
 
         </div>
@@ -91,6 +91,10 @@
             }
         },
         methods: {
+            exit() {
+                localStorage.clear();
+                this.$router.push('/');
+            },
             async copyToClipboard(text, type) {
                 try {
                     await navigator.clipboard.writeText(text);
