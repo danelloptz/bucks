@@ -2,7 +2,7 @@
     <section class="card" :style="{ background: color }">
         <div class="content">
             <span class="mute">{{ label }}</span>
-            <h2 class="cash">{{ cash.toFixed(2)}}$</h2>
+            <h2 class="cash">{{ cash }}$</h2>
         </div>
         <img :src="icon" class="icon" />
     </section>
@@ -12,7 +12,7 @@
     export default {
         props: {
             label: String,
-            cash: [Number, String],
+            cash: String,
             icon: String,
             color: String
         }

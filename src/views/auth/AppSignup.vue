@@ -95,7 +95,7 @@
                 }
             },
             async getReferer() {
-                const referer_reponse = await getReferralInfo(this.code);
+                const referer_reponse = await getReferralInfo(+this.code);
                 if (referer_reponse) {
                     this.referrer = referer_reponse;
                 }
@@ -118,7 +118,7 @@
                     return;
                 }
                 this.error = null;
-                const signup_response = await signUp(this.email, this.password, this.code);
+                const signup_response = await signUp(this.email, this.password, +this.code);
                 if (signup_response.access_token) {
                     localStorage.setItem('token', signup_response.access_token);
                     localStorage.setItem('refresh_token', signup_response.refresh_token);

@@ -2,7 +2,7 @@
     <section class="card">
         <img :src="user.avatar" class="avatar" />
         <div class="content">
-            <h2>{{ user.name }}</h2>
+            <h2>{{ user.name || 'Без имени' }}</h2>
             <div class="bage" :style="{
                     background: bageColor
                 }">
@@ -10,7 +10,7 @@
                 <span class="bage_name" :style="{ color: user.tariff == 'Platinum' ? 'white' : '#282928' }">{{ user.tariff }}</span>
             </div>
             <div class="row">
-                <span class="bage_id">ID: {{ user.id }}</span>
+                <span class="bage_id">ID: {{ user.referrer_code }}</span>
             </div>
         </div>
     </section>

@@ -3,11 +3,11 @@
         <h2 class="title">Линейная структура</h2>
         <div class="row">
             <div class="col">
-                <span class="count">{{ first_line }}</span>
+                <span class="count">{{ formattedFirstLine }}</span>
                 <span class="mute">первая линия</span>
             </div>
             <div class="col">
-                <span class="count">{{ total }}</span>
+                <span class="count">{{ formattedTotal }}</span>
                 <span class="mute">всего</span>
             </div>
         </div>
@@ -20,6 +20,18 @@
         props: {
             first_line: Number,
             total: Number
+        },
+        computed: {
+            formattedFirstLine() {
+                return this.first_line
+                    .toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+            },
+            formattedTotal() {
+                return this.first_line
+                    .toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+            },
         }
     };
 </script>

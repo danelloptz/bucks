@@ -1,7 +1,7 @@
 <template>
     <section class="card">
         <h2 class="title">После вас зарегистрировано</h2>
-        <span class="count">{{ count }}</span>
+        <span class="count">{{ formattedCount }}</span>
         <span class="mute">человек</span>
         <img src="@/assets/images/count_signup.png" class="img" />
     </section>
@@ -11,7 +11,15 @@
     export default {
         props: {
             count: Number
+        },
+        computed: {
+            formattedCount() {
+                return this.count
+                    .toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+            }
         }
+
     };
 </script>
 

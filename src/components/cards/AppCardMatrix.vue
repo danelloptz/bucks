@@ -1,13 +1,13 @@
 <template>
     <section class="card">
-        <h2 class="title">Линейная структура</h2>
+        <h2 class="title">Матрица</h2>
         <div class="row">
             <div class="col">
                 <div class="sm_row">
                     <div class="icon_wrapper">
                         <img src="@/assets/images/check.png" class="icon"/>
                     </div>
-                    <span class="count">{{ active_business }}</span>
+                    <span class="count">{{ formattedActive }}</span>
                 </div>
                 <span class="mute">активных бизнес мест</span>
             </div>
@@ -16,7 +16,7 @@
                     <div class="icon_wrapper">
                         <img src="@/assets/images/forbidden.png" class="icon"/>
                     </div>
-                    <span class="count">{{ unactive_business }}</span>
+                    <span class="count">{{ formattedUnactive }}</span>
                 </div>
                 <span class="mute">неактивных бизнес мест</span>
             </div>
@@ -25,7 +25,7 @@
                     <div class="icon_wrapper">
                         <img src="@/assets/images/tree.png" class="icon"/>
                     </div>
-                    <span class="count">{{ structure }}</span>
+                    <span class="count">{{ formattedStructure }}</span>
                 </div>
                 <span class="mute">cтруктура</span>
             </div>
@@ -40,6 +40,23 @@
             active_business: Number,
             unactive_business: Number,
             structure: Number
+        },
+        computed: {
+            formattedActive() {
+                return this.active_business
+                    .toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+            },
+            formattedUnactive() {
+                return this.unactive_business
+                    .toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+            },
+            formattedStructure() {
+                return this.structure
+                    .toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+            },
         }
     };
 </script>
@@ -70,7 +87,6 @@
         color: #BBCFF4;
         font-family: 'OpenSans';
         font-style: italic;
-        margin-top: 12px;
         font-weight: 600;
     }
 
@@ -104,6 +120,7 @@
         display: flex;
         align-items: center;
         column-gap: 10px;
+        margin-top: 12px;
     }
 
     .icon_wrapper {
@@ -113,6 +130,7 @@
         padding: 4px;
         background: #01206B;
         border-radius: 5px;
+        margin-top: 5px;
     }
 
     .icon {

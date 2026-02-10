@@ -2,10 +2,10 @@
     <section class="main">
         <AppAvatarModal 
             v-if="avatarModal"
-            :avatar="'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR7F-gNQ26Wdle9t9FLbhGwyytfSqbdvYT2lw&s'"
-            :name="'Дмитрий Петренко'"
-            :tariff="'Platinum'"
-            :id="'842052594'"
+            :avatar="userData.avatar"
+            :name="userData.name || 'Без имени'"
+            :tariff="userData.tariff"
+            :id="userData.referrer_code"
             @close="avatarModal = $event"
         />
         <div class="left">
@@ -26,19 +26,19 @@
             <div class="header">
                 <AppUserWallet
                     :label="'Основной счет'"
-                    :cash="10"
+                    :cash="mainWallet"
                     :icon="AppMainWallet"
                     :color="'#0059FF'"
                 />
                 <AppUserWallet
                     :label="'Реферальный счет'"
-                    :cash="100"
+                    :cash="referalWallet"
                     :icon="AppReferalWallet"
                     :color="'#003BE1'"
                 />
                 <AppUserWallet
                     :label="'Рекламный счет'"
-                    :cash="1000"
+                    :cash="addsWallet"
                     :icon="AppAddWallet"
                     :color="'#001DC3'"
                 />
@@ -49,7 +49,7 @@
                 />
             </div>
             <AppTopPanel :nav="stack" />
-            <AppTeam v-if="currentComponent == 2" />
+            <AppTeam v-if="currentComponent == 2" :userData="userData" />
         </div>
     </section>
 </template>
@@ -113,20 +113,43 @@
             }
         },
         async created() {
-            try {
-                const user_info_reponse = await getUserInfo(localStorage.getItem('token'));
-                if (!user_info_reponse) {
+            await this.updateUserInfo();
+        },
+        computed: {
+            mainWallet() {
+                if (!this.userData) return "";
+
+                const main = this.userData.wallets.find(item => item.type == 'main');
+                return main.balance;
+            },
+            referalWallet() {
+                if (!this.userData) return "";
+
+                const main = this.userData.wallets.find(item => item.type == 'referral');
+                return main.balance;
+            },
+            addsWallet() {
+                if (!this.userData) return "";
+
+                const main = this.userData.wallets.find(item => item.type == 'ads');
+                return main.balance;
+            },
+        },
+        methods: {
+            async updateUserInfo() {
+                try {
+                    const user_info_reponse = await getUserInfo(localStorage.getItem('token'));
+                    if (!user_info_reponse) {
+                        localStorage.clear();
+                        this.$router.push('/');
+                    }
+                    this.userData = user_info_reponse;
+                } catch(err) {
+                    console.log(err);
                     localStorage.clear();
                     this.$router.push('/');
                 }
-                this.userData = user_info_reponse;
-            } catch(err) {
-                console.log(err);
-                localStorage.clear();
-                this.$router.push('/');
-            }
-        },
-        methods: {
+            },
             addItemStack(item) {
                 this.stack.push(item);
             },

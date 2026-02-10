@@ -22,16 +22,17 @@ export default {
         height: 60px;
         border-radius: 10px;
         border: none;
-        background: #0059FF;
+        background: none;
         color: white;
         font-weight: 600;
         cursor: pointer;
         font-family: 'OpenSans';
         font-size: 18px;
         transition: .2s ease-in;
+        border: 1px solid #FFFFFF80
     }
 
     .btn:hover {
-        background: #1667ff;
+        background: #ffffff2a;
     }
 </style>
