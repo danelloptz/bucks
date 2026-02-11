@@ -39,7 +39,7 @@
             <AppButtonEmpty class="search_btn">Сброс</AppButtonEmpty>
         </div>
 
-        <AppUserLinear
+        <!-- <AppUserLinear
             :avatar="'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRNQoZ_eF4ZVub99aUtKo8WZSBSLWEiyr99UQ&s'"
             :name="'Петрова Марина Викторовна'"
             :tariff="'Silver'"
@@ -47,6 +47,11 @@
             :level="1"
             :first_line="55"
             :team="505"
+        /> -->
+        <AppUserLinear
+            :user="rootUser"
+            :depth="0"
+            class="main_linear"
         />
     </section>
 </template>
@@ -61,7 +66,16 @@
         components: { AppButton, AppSearch, AppButtonEmpty, AppUserLinear },
         data() {
             return {
-                search: null
+                search: null,
+                rootUser: {
+                    id: 583947261,
+                    avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRNQoZ_eF4ZVub99aUtKo8WZSBSLWEiyr99UQ&s',
+                    name: 'Петрова Марина Викторовна',
+                    tariff: 'Silver',
+                    level: 1,
+                    first_line: 55,
+                    team: 505
+                }
             }
         }
     };
@@ -124,5 +138,9 @@
         width: 130px;
         height: 40px;
         font-size: 16px;
+    }
+
+    .main_linear {
+        overflow-x: auto;
     }
 </style>
