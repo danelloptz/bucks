@@ -43,16 +43,19 @@
         },
         computed: {
             formattedActive() {
+                if (!this.active_business && this.active_business != 0) return "";
                 return this.active_business
                     .toString()
                     .replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
             },
             formattedUnactive() {
+                if (!this.unactive_business && this.unactive_business != 0) return "";
                 return this.unactive_business
                     .toString()
                     .replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
             },
             formattedStructure() {
+                if (!this.structure && this.structure != 0) return "";
                 return this.structure
                     .toString()
                     .replace(/\B(?=(\d{3})+(?!\d))/g, ' ');

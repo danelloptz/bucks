@@ -23,12 +23,14 @@
         },
         computed: {
             formattedFirstLine() {
+                if (!this.first_line && this.first_line != 0) return "";
                 return this.first_line
                     .toString()
                     .replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
             },
             formattedTotal() {
-                return this.first_line
+                if (!this.total && this.total != 0) return "";
+                return this.total
                     .toString()
                     .replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
             },

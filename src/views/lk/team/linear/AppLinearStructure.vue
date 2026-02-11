@@ -38,6 +38,16 @@
             <AppButton class="search_btn">Поиск</AppButton>
             <AppButtonEmpty class="search_btn">Сброс</AppButtonEmpty>
         </div>
+
+        <AppUserLinear
+            :avatar="'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRNQoZ_eF4ZVub99aUtKo8WZSBSLWEiyr99UQ&s'"
+            :name="'Петрова Марина Викторовна'"
+            :tariff="'Silver'"
+            :code="'583947261'"
+            :level="1"
+            :first_line="55"
+            :team="505"
+        />
     </section>
 </template>
 
@@ -45,8 +55,10 @@
     import AppButton from '@/components/buttons/AppButton.vue';
     import AppSearch from '@/components/inputs/AppSearch.vue';
     import AppButtonEmpty from '@/components/buttons/AppButtonEmpty.vue';
+    import AppUserLinear from '@/components/cards/AppUserLinear.vue';
+
     export default {
-        components: { AppButton, AppSearch, AppButtonEmpty },
+        components: { AppButton, AppSearch, AppButtonEmpty, AppUserLinear },
         data() {
             return {
                 search: null

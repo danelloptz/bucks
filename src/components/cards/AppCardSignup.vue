@@ -14,6 +14,7 @@
         },
         computed: {
             formattedCount() {
+                if (!this.count && this.count != 0) return "";
                 return this.count
                     .toString()
                     .replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
