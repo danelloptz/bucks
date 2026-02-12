@@ -35,9 +35,11 @@
 
         <div class="row">
             <AppSearch v-model="search" :placeholder="'Введите ID'" class="search" />
-            <AppButton class="search_btn">Поиск</AppButton>
-            <AppButtonEmpty class="search_btn">Сброс</AppButtonEmpty>
+            <AppButton class="search_btn" @click="searchUser(search)">Поиск</AppButton>
+            <AppButtonEmpty class="search_btn" @click="loadRootChildren()">Сброс</AppButtonEmpty>
         </div>
+
+        <span class="text error" v-if="error">{{ error }}</span>
 
         <!-- <AppUserLinear
             :avatar="'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRNQoZ_eF4ZVub99aUtKo8WZSBSLWEiyr99UQ&s'"
@@ -48,11 +50,14 @@
             :first_line="55"
             :team="505"
         /> -->
-        <AppUserLinear
-            :user="rootUser"
-            :depth="0"
-            class="main_linear"
-        />
+        <div class="main_linear">
+            <AppUserLinear
+                v-for="child in rootChildren"
+                :key="child.id"
+                :user="child"
+                :depth="0"
+            />
+        </div>
     </section>
 </template>
 
@@ -62,19 +67,63 @@
     import AppButtonEmpty from '@/components/buttons/AppButtonEmpty.vue';
     import AppUserLinear from '@/components/cards/AppUserLinear.vue';
 
+    import { getLinear, findUser } from '@/services/structure';
+
     export default {
         components: { AppButton, AppSearch, AppButtonEmpty, AppUserLinear },
+        props: {
+            userData: Object,
+        },
         data() {
             return {
                 search: null,
-                rootUser: {
-                    id: 583947261,
-                    avatar: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRNQoZ_eF4ZVub99aUtKo8WZSBSLWEiyr99UQ&s',
-                    name: 'Петрова Марина Викторовна',
-                    tariff: 'Silver',
-                    level: 1,
-                    first_line: 55,
-                    team: 505
+                rootChildren: [],
+                loading: false,
+                page: 1,
+                perPage: 5,
+                totalPages: 1,
+                error: null
+            }
+        },
+        async created() {
+            await this.loadRootChildren();
+        },
+        methods: {
+            async searchUser(id) {
+                try {
+                    const search_response = await findUser(id, localStorage.getItem('token'));
+                    if (!search_response) {
+                        this.error = 'Такого пользователя нет в вашей структуре';
+                        return;
+                    }
+                    await this.loadRootChildren(search_response.id);
+                } catch(err) {
+                    this.error = 'Такого пользователя нет в вашей структуре';
+                }
+                
+            }, 
+            async loadRootChildren(id = false) {
+                try {
+                    this.loading = true;
+
+                    const token = localStorage.getItem('token');
+                    const offset = (this.page - 1) * this.perPage;
+
+                    const user_id = id ? id : this.userData.id;
+
+                    const response = await getLinear(
+                        user_id,
+                        this.perPage,
+                        offset,
+                        token
+                    )
+
+                    this.rootChildren = response.users;
+                    this.totalPages = response.level_1;
+                    this.error = null;
+                }
+                finally {
+                    this.loading = false;
                 }
             }
         }
@@ -142,5 +191,10 @@
 
     .main_linear {
         overflow-x: auto;
+        min-height: 300px;
+    }
+
+    .error {
+        color: red !important;
     }
 </style>

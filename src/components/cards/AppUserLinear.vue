@@ -1,12 +1,24 @@
 <template>
     <div class="component">
+        <AppLinearModal 
+            v-if="userModal"
+            :avatar="user.avatar"
+            :name="user.name || 'Без имени'"
+            :tariff="user.tariff"
+            :id="user.referrer_code"
+            :place="user.business_places_count"
+            :email="user.email || 'Не указан'"
+            :tg="user.tg || 'Не указан'"
+            @close="userModal = $event"
+        />
         <!-- Карточка -->
         <section 
+            @click="openModal"
             class="card"
             :style="{ marginLeft: depth * 40 + 'px' }"
         >
-            <div class="toogle_wrapper" @click="toggle">
-                <span class="toogle">
+            <div class="toogle_wrapper" @click.stop="toggle">
+                <span class="toogle" v-if="user.level_1_count > 0">
                     {{ isOpen ? '−' : '+' }}
                 </span>
             </div>
@@ -32,7 +44,7 @@
                             {{ user.tariff }}
                         </span>
                     </div>
-                    <span class="id">ID: {{ user.id }}</span>
+                    <span class="id">ID: {{ user.referrer_code }}</span>
                 </div>
             </div>
 
@@ -41,11 +53,11 @@
             </div>
 
             <div class="col m2">
-                <span class="col_text">{{ user.first_line }}</span>
+                <span class="col_text">{{ user.level_1_count }}</span>
             </div>
 
             <div class="col m3">
-                <span class="col_text">{{ user.team }}</span>
+                <span class="col_text">{{ user.total_in_line_count }}</span>
             </div>
         </section>
 
@@ -89,9 +101,12 @@
 
 <script>
     import AppPagination from '@/components/paginations/AppPagination.vue';
+    import AppLinearModal from '@/components/modals/AppLinearModal.vue';
+
+    import { getLinear } from '@/services/structure';
 export default {
     name: 'AppUserLinear',
-    components: { AppPagination },
+    components: { AppPagination, AppLinearModal },
 
     props: {
         user: {
@@ -113,7 +128,9 @@ export default {
 
             page: 1,
             perPage: 5,
-            totalPages: 1
+            totalPages: 1,
+
+            userModal: false
         }
     },
 
@@ -167,8 +184,14 @@ export default {
         }
     },
 
-    methods: {
+    async created() {
+        await this.loadChildren();
+    },
 
+    methods: {
+        openModal() {
+            this.userModal = true;
+        },
         async toggle() {
             this.isOpen = !this.isOpen
 
@@ -185,28 +208,25 @@ export default {
                 // const response = await fetch(`/api/users/${this.user.id}/referrals?page=${this.page}&limit=${this.perPage}`)
                 // const result = await response.json()
 
-                // MOCK
-                const result = {
-                    data: Array.from({ length: this.perPage }, (_, i) => ({
-                        id: this.user.id * 100 + i + this.page,
-                        avatar: this.user.avatar,
-                        name: `Реферал ${i + 1} (стр. ${this.page})`,
-                        tariff: ['Silver', 'Gold', 'Platinum'][i % 3],
-                        level: this.depth + 1,
-                        first_line: 10,
-                        team: 100
-                    })),
-                    totalPages: 6
-                }
+                const token = localStorage.getItem('token'); // или откуда ты его берёшь
 
-                this.children = result.data
-                this.totalPages = result.totalPages
-                this.loaded = true
+                const offset = (this.page - 1) * this.perPage;
+
+                const response = await getLinear(
+                    this.user.id,
+                    this.perPage,
+                    offset,
+                    token
+                )
+
+                this.children = response.users;
+                this.totalPages = response.level_1;
+                this.loaded = true;
 
             } catch (e) {
-                console.error(e)
+                console.error(e);
             } finally {
-                this.loading = false
+                this.loading = false;
             }
         },
 
@@ -264,6 +284,8 @@ export default {
     }
 
     .toogle_wrapper {
+        width: 15px;
+        height: 15px;
         padding: 3px 5px;
         background: #0059FF;
         border-radius: 50%;
@@ -298,6 +320,7 @@ export default {
         color: white;
         font-family: 'OpenSans';
         font-weight: 600;
+        width: 300px;
     }
 
     .row {
@@ -343,6 +366,7 @@ export default {
 
     .component {
         margin-top: 10px;
+        position: relative;
     }
 
     .pagination {

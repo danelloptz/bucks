@@ -14,14 +14,34 @@
                     </div>
                 </div>
             </div>
-            <div class="sm_row">
-                <span class="id">ID: {{ id }}</span>
+            <div class="row m15">
+                <div class="sm_row">
+                    <span class="id">ID: {{ id }}</span>
 
+                    <img
+                        v-if="copied !== 'id'"
+                        src="@/assets/images/copy.png"
+                        class="copy"
+                        @click="copyToClipboard(id, 'id')"
+                    />
+
+                    <img
+                        v-else
+                        src="@/assets/images/check.png"
+                        class="copy success"
+                    />
+                </div>
+                <span class="id">Бизнес место: {{ place }}</span>
+            </div>
+            
+
+            <div class="row2 m20">
+                <span class="id">Почта: {{ email }}</span>
                 <img
-                    v-if="copied !== 'id'"
+                    v-if="copied !== 'email'"
                     src="@/assets/images/copy.png"
                     class="copy"
-                    @click="copyToClipboard(id, 'id')"
+                    @click="copyToClipboard(email, 'email')"
                 />
 
                 <img
@@ -32,27 +52,19 @@
             </div>
 
             <div class="row2">
-                <div class="sm_row">
-                    <span class="ref_text">
-                        Реферальная ссылка:<br>
-                        {{ `${baseUrl}?=${id}` }}
-                    </span>
+                <span class="id">Телеграм: {{ tg }}</span>
+                <img
+                    v-if="copied !== 'tg'"
+                    src="@/assets/images/copy.png"
+                    class="copy"
+                    @click="copyToClipboard(email, 'tg')"
+                />
 
-                    <img
-                        v-if="copied !== 'ref'"
-                        src="@/assets/images/copy.png"
-                        class="copy"
-                        @click="copyToClipboard(`${baseUrl}?=${id}`, 'ref')"
-                    />
-
-                    <img
-                        v-else
-                        src="@/assets/images/check.png"
-                        class="copy success"
-                    />
-                </div>
-
-                <AppButton class="btn" @click="exit">Выйти</AppButton>
+                <img
+                    v-else
+                    src="@/assets/images/check.png"
+                    class="copy success"
+                />
             </div>
 
         </div>
@@ -60,16 +72,16 @@
 </template> 
 
 <script>
-    import AppButton from '@/components/buttons/AppButton.vue';
-
     export default {
         props: {
             avatar: String,
             name: String,
             tariff: String,
-            id: String
+            id: String,
+            place: Number,
+            email: String,
+            tg: String
         },
-        components: { AppButton },
         data() {
             return {
                 baseUrl: null,
@@ -179,7 +191,6 @@
         display: flex;
         column-gap: 11px;
         align-items: center;
-        margin-top: 15px;
     }
 
     .id, .ref_text {
@@ -207,8 +218,8 @@
     .row2 {
         width: 100%;
         display: flex;
-        justify-content: space-between;
-        align-items: end;
+        align-items: center;
+        column-gap: 10px;
     }
 
     .btn {
@@ -236,5 +247,13 @@
         font-size: 10.98px;
         font-weight: 700;
         font-family: 'OpenSans';
+    }
+
+    .m15 {
+        margin-top: 15px;
+    }
+
+    .m20 {
+        margin-top: 20px;
     }
 </style>

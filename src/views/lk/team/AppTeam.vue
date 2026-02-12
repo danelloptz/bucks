@@ -64,7 +64,7 @@
             :items="listSwtich"
             class="switch"
         />
-        <AppLinearStructure v-if="activeIndex == 0" />
+        <AppLinearStructure v-if="activeIndex == 0" :userData="userData" />
     </section>
 </template>
 
