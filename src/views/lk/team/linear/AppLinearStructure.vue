@@ -31,7 +31,9 @@
         <span class="text">На платных тарифах доход умножается в разы. Чем активнее приглашаете — тем больше зарабатываете.</span>
         <span class="text">Начните строить свою структуру прямо сейчас — каждый день промедления это упущенная прибыль!</span>
 
-        <AppButton class="linear_btn">Как работает линейный маркетинг</AppButton>
+        <AppButton class="linear_btn" @click="changeTable">Как работает линейный маркетинг</AppButton>
+
+        <AppLinearTable v-if="isTable" />
 
         <div class="row">
             <AppSearch v-model="search" :placeholder="'Введите ID'" class="search" />
@@ -66,11 +68,12 @@
     import AppSearch from '@/components/inputs/AppSearch.vue';
     import AppButtonEmpty from '@/components/buttons/AppButtonEmpty.vue';
     import AppUserLinear from '@/components/cards/AppUserLinear.vue';
+    import AppLinearTable from '@/components/tables/AppLinearTable.vue';
 
     import { getLinear, findUser } from '@/services/structure';
 
     export default {
-        components: { AppButton, AppSearch, AppButtonEmpty, AppUserLinear },
+        components: { AppButton, AppSearch, AppButtonEmpty, AppUserLinear, AppLinearTable },
         props: {
             userData: Object,
         },
@@ -82,13 +85,17 @@
                 page: 1,
                 perPage: 5,
                 totalPages: 1,
-                error: null
+                error: null,
+                isTable: false
             }
         },
         async created() {
             await this.loadRootChildren();
         },
         methods: {
+            changeTable() {
+                this.isTable = !this.isTable;
+            },
             async searchUser(id) {
                 try {
                     const search_response = await findUser(id, localStorage.getItem('token'));
