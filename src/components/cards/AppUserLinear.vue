@@ -3,12 +3,12 @@
         <AppLinearModal 
             v-if="userModal"
             :avatar="user.avatar"
-            :name="user.name || 'Без имени'"
-            :tariff="user.tariff"
-            :id="user.referrer_code"
-            :place="user.business_places_count"
-            :email="user.email || 'Не указан'"
-            :tg="user.tg || 'Не указан'"
+            :name="hideSensitive ? '******' : (user.name || 'Без имени')"
+            :tariff="hideSensitive ? '******' : user.tariff"
+            :id="hideSensitive ? '******' : user.referrer_code"
+            :place="hideSensitive ? '******' : user.business_places_count"
+            :email="hideSensitive ? '******' : (user.email || 'Не указан')"
+            :tg="hideSensitive ? '******' : (user.tg || 'Не указан')"
             @close="userModal = $event"
         />
         <!-- Карточка -->
@@ -26,7 +26,7 @@
             <img :src="user.avatar" class="avatar" />
 
             <div class="col">
-                <span class="name">{{ user.name }}</span>
+                <span class="name">{{  hideSensitive ? '******' : user.name }}</span>
                 <div class="row">
                     <div 
                         class="bage"
@@ -41,23 +41,23 @@
                             class="bage_name"
                             :style="{ color: user.tariff === 'Platinum' ? 'white' : '#282928' }"
                         >
-                            {{ user.tariff }}
+                            {{  hideSensitive ? '******' : user.tariff }}
                         </span>
                     </div>
-                    <span class="id">ID: {{ user.referrer_code }}</span>
+                    <span class="id">ID: {{  hideSensitive ? '******' : user.referrer_code }}</span>
                 </div>
             </div>
 
             <div class="col m1">
-                <span class="col_text">{{ user.level }}</span>
+                <span class="col_text">{{ hideSensitive ? '******' : user.level }}</span>
             </div>
 
             <div class="col m2">
-                <span class="col_text">{{ user.level_1_count }}</span>
+                <span class="col_text">{{ hideSensitive ? '******' : user.level_1_count }}</span>
             </div>
 
             <div class="col m3">
-                <span class="col_text">{{ user.total_in_line_count }}</span>
+                <span class="col_text">{{ hideSensitive ? '******' : user.total_in_line_count }}</span>
             </div>
         </section>
 
@@ -79,6 +79,7 @@
                     :key="child.id"
                     :user="child"
                     :depth="depth + 1"
+                    :hideSensitive="hideSensitive"
                 />
 
                 <!-- пагинация -->
@@ -116,7 +117,8 @@ export default {
         depth: {
             type: Number,
             default: 0
-        }
+        },
+        hideSensitive: Boolean
     },
 
     data() {
@@ -189,6 +191,10 @@ export default {
     },
 
     methods: {
+        mask(value) {
+            if (!value) return '****'
+            return '********'
+        },
         openModal() {
             this.userModal = true;
         },

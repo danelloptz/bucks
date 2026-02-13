@@ -39,24 +39,25 @@
         props: {
             active_business: Number,
             unactive_business: Number,
-            structure: Number
+            structure: Number,
+            hideSensitive: Boolean
         },
         computed: {
             formattedActive() {
                 if (!this.active_business && this.active_business != 0) return "";
-                return this.active_business
+                return this.hideSensitive ? '******' : this.active_business
                     .toString()
                     .replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
             },
             formattedUnactive() {
                 if (!this.unactive_business && this.unactive_business != 0) return "";
-                return this.unactive_business
+                return this.hideSensitive ? '******' : this.unactive_business
                     .toString()
                     .replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
             },
             formattedStructure() {
                 if (!this.structure && this.structure != 0) return "";
-                return this.structure
+                return this.hideSensitive ? '******' : this.structure
                     .toString()
                     .replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
             },

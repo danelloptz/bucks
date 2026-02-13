@@ -26,21 +26,24 @@
             <div class="header">
                 <AppUserWallet
                     :label="'Основной счет'"
-                    :cash="mainWallet"
+                    :cash="hideSensitive ? '******' : mainWallet"
                     :icon="AppMainWallet"
                     :color="'#0059FF'"
+                    :hideSensitive="hideSensitive"
                 />
                 <AppUserWallet
                     :label="'Реферальный счет'"
-                    :cash="referalWallet"
+                    :cash="hideSensitive ? '******' : referalWallet"
                     :icon="AppReferalWallet"
                     :color="'#003BE1'"
+                    :hideSensitive="hideSensitive"
                 />
                 <AppUserWallet
                     :label="'Рекламный счет'"
-                    :cash="addsWallet"
+                    :cash="hideSensitive ? '******' : addsWallet"
                     :icon="AppAddWallet"
                     :color="'#001DC3'"
+                    :hideSensitive="hideSensitive"
                 />
                 <img 
                     src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR7F-gNQ26Wdle9t9FLbhGwyytfSqbdvYT2lw&s" 
@@ -48,8 +51,21 @@
                     @click="openAvatar"
                 />
             </div>
-            <AppTopPanel :nav="stack" />
-            <AppTeam v-if="currentComponent == 2" :userData="userData" />
+            <div class="top_panel_row">
+                <AppTopPanel :nav="stack" />
+                <div 
+                    class="eye_wrapper"
+                    :class="{ closed: hideSensitive }"
+                    @click="toggleSensitive"
+                >
+                    <img :src="eyeOpen" class="eye_icon" />
+                </div>
+            </div>
+            <AppTeam 
+                v-if="currentComponent == 2" 
+                :userData="userData" 
+                :hideSensitive="hideSensitive"
+            />
         </div>
     </section>
 </template>
@@ -69,6 +85,7 @@
     import AppMainWallet from '@/assets/images/main_wallet.png'
     import AppReferalWallet from '@/assets/images/referal_wallet.png'
     import AppAddWallet from '@/assets/images/add_wallet.png'
+    import eyeOpen from '@/assets/images/eye.png'
 
     import { getUserInfo } from '@/services/users';
 
@@ -106,10 +123,12 @@
                         link: 'https://socpublic.com'
                     }
                 ],
+                hideSensitive: false,
                 avatarModal: false,
                 AppMainWallet,
                 AppReferalWallet,
-                AppAddWallet
+                AppAddWallet,
+                eyeOpen
             }
         },
         async created() {
@@ -136,6 +155,9 @@
             },
         },
         methods: {
+            toggleSensitive() {
+                this.hideSensitive = !this.hideSensitive
+            },
             async updateUserInfo() {
                 try {
                     const user_info_reponse = await getUserInfo(localStorage.getItem('token'));
@@ -196,10 +218,6 @@
         font-weight: 600;
         font-family: 'Mont';
         color: white;
-    }
-
-    .nav {
-        margin-top: 35px;
     }
 
     .line {
@@ -295,4 +313,40 @@
         border-radius: 50%;
         cursor: pointer;
     }
+
+    .top_panel_row {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 35px;
+    }
+
+    .eye_wrapper {
+        width: 30px;
+        height: 30px;
+        position: relative;
+        cursor: pointer;
+    }
+
+    .eye_icon {
+        width: 100%;
+        height: 100%;
+    }
+
+    .eye_wrapper.closed {
+        opacity: 0.7;
+    }
+
+    .eye_wrapper.closed::before {
+        content: "";
+        position: absolute;
+        width: 42px;
+        height: 2px;
+        background: white;
+        top: 50%;
+        left: -6px;
+        transform: rotate(-45deg);
+    }
+
 </style>

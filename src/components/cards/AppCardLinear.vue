@@ -19,18 +19,19 @@
     export default {
         props: {
             first_line: Number,
-            total: Number
+            total: Number,
+            hideSensitive: Boolean
         },
         computed: {
             formattedFirstLine() {
                 if (!this.first_line && this.first_line != 0) return "";
-                return this.first_line
+                return this.hideSensitive ? '******' : this.first_line
                     .toString()
                     .replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
             },
             formattedTotal() {
                 if (!this.total && this.total != 0) return "";
-                return this.total
+                return this.hideSensitive ? '******' : this.total
                     .toString()
                     .replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
             },

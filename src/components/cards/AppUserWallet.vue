@@ -2,7 +2,7 @@
     <section class="card" :style="{ background: color }">
         <div class="content">
             <span class="mute">{{ label }}</span>
-            <h2 class="cash">{{ cash }}$</h2>
+            <h2 class="cash">{{ hideSensitive ? '******' : cash }}$</h2>
         </div>
         <img :src="icon" class="icon" />
     </section>
@@ -14,7 +14,8 @@
             label: String,
             cash: String,
             icon: String,
-            color: String
+            color: String,
+            hideSensitive: Boolean
         }
     };
 </script>

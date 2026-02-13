@@ -10,12 +10,13 @@
 <script>
     export default {
         props: {
-            count: Number
+            count: Number,
+            hideSensitive: Boolean
         },
         computed: {
             formattedCount() {
                 if (!this.count && this.count != 0) return "";
-                return this.count
+                return this.hideSensitive ? '******' : this.count
                     .toString()
                     .replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
             }

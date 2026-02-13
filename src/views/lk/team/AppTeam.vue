@@ -3,16 +3,19 @@
         <div class="row">
             <AppCardSignup 
                 :count="struct?.total_users_after_reg" 
+                :hideSensitive="hideSensitive"
             />
             <AppCardLinear 
                 :first_line="struct?.linear_structure.level_1" 
                 :total="struct?.linear_structure.total" 
+                :hideSensitive="hideSensitive"
             />
         </div>
         <AppCardMatrix 
             :active_business="struct?.matrix_structure.active_business_places" 
             :unactive_business="struct?.matrix_structure.inactive_business_places" 
             :structure="struct?.matrix_structure.total_users_in_structure" 
+            :hideSensitive="hideSensitive"
             class="long_card" 
         />
 
@@ -22,7 +25,7 @@
             <div class="col">
                 <h2 class="col_title">Ваш ID:</h2>
                 <div class="sm_row">
-                    <span>{{ userData.referrer_code }}</span>
+                    <span>{{ hideSensitive ? '******' :  userData.referrer_code }}</span>
                     <img
                         v-if="copied !== 'id'"
                         src="@/assets/images/copy.png"
@@ -43,7 +46,7 @@
                 </span>
 
                 <div class="sm_row">
-                    <span>{{ `${baseUrl}?=${userData.referrer_code}` }}</span>
+                    <span>{{ hideSensitive ? '******' :  `${baseUrl}?=${userData.referrer_code}` }}</span>
                     <img
                         v-if="copied !== 'ref'"
                         src="@/assets/images/copy.png"
@@ -64,7 +67,11 @@
             :items="listSwtich"
             class="switch"
         />
-        <AppLinearStructure v-if="activeIndex == 0" :userData="userData" />
+        <AppLinearStructure 
+            v-if="activeIndex == 0" 
+            :userData="userData" 
+            :hideSensitive="hideSensitive"
+        />
     </section>
 </template>
 
@@ -82,6 +89,7 @@
         components: { AppCardSignup, AppCardLinear, AppCardMatrix, AppSwitch, AppLinearStructure },
         props: {
             userData: Object,
+            hideSensitive: Boolean
         },
         data() {
             return {

@@ -58,6 +58,7 @@
                 :key="child.id"
                 :user="child"
                 :depth="0"
+                :hideSensitive="hideSensitive"
             />
         </div>
     </section>
@@ -76,6 +77,7 @@
         components: { AppButton, AppSearch, AppButtonEmpty, AppUserLinear, AppLinearTable },
         props: {
             userData: Object,
+            hideSensitive: Boolean
         },
         data() {
             return {
