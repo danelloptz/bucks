@@ -1,6 +1,10 @@
 <template>
     <input
         class="input"
+        :style="{ 
+            background: empty ? 'none' :  '#14152E',
+            border: empty ? '1px solid white' : 'none'
+        }"
         :type="type"
         :value="modelValue"
         :placeholder="label"
@@ -17,6 +21,10 @@
             type: {
                 type: String,
                 default: "text"
+            },
+            empty: {
+                type: Boolean,
+                default: false
             }
         },
     };
@@ -31,7 +39,6 @@
         padding-left: 20px;
         border-radius: 10px;
         border: 1px solid #14152E;
-        background: #14152E;
         color: white;
         font-size: 15px;
         outline: none;

@@ -72,6 +72,11 @@
             :userData="userData" 
             :hideSensitive="hideSensitive"
         />
+        <AppMatrixStructure 
+            v-if="activeIndex == 1" 
+            :userData="userData" 
+            :hideSensitive="hideSensitive"
+        />
     </section>
 </template>
 
@@ -82,11 +87,12 @@
     import AppSwitch from '@/components/switchs/AppSwitch.vue';
 
     import AppLinearStructure from '@/views/lk/team/linear/AppLinearStructure.vue';
+    import AppMatrixStructure from '@/views/lk/team//linear/AppMatrixStructure.vue';
 
     import { getStructure } from '@/services/structure';
 
     export default {
-        components: { AppCardSignup, AppCardLinear, AppCardMatrix, AppSwitch, AppLinearStructure },
+        components: { AppCardSignup, AppCardLinear, AppCardMatrix, AppSwitch, AppLinearStructure, AppMatrixStructure },
         props: {
             userData: Object,
             hideSensitive: Boolean
