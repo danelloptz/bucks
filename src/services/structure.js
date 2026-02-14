@@ -60,3 +60,32 @@ export async function findUser(referral_code, token) {
         return false; 
     }
 }
+
+export async function getMatrix(root_id, depth, token) {
+    try {
+        let data;
+        if (!root_id) {
+            data = {
+                depth: depth
+            }
+        } else {
+            data = {
+                root_id: root_id,
+                depth: depth
+            }
+        }
+        const response = await axios.get(`${API_BASE_URL}/api/v1/business-places/matrix`, 
+            {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                params: data
+            }
+        );
+        return response.data;
+    } catch (error) {
+        console.error("Ошибка при получении матрицы пользователей.", error);
+        return false; 
+    }
+}

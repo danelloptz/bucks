@@ -30,6 +30,8 @@
             :hideSensitive="false"
             class="card_matrix"
         />
+
+        <AppBinarTree :data="matrix" />
     </section>
 </template>
 
@@ -38,16 +40,26 @@
     import AppMatrixTable from '@/components/tables/AppMatrixTable.vue';
     import AppCardBusinessPlace from '@/components/cards/AppCardBusinessPlace.vue';
     import AppCardMatrixBusiness from '@/components/cards/AppCardMatrixBusiness.vue';
+    import AppBinarTree from '@/components/tables/AppBinarTree.vue';
+
+    import { getMatrix } from '@/services/structure';
     
     export default {
-        components: { AppButton, AppMatrixTable, AppCardBusinessPlace, AppCardMatrixBusiness },
+        components: { AppButton, AppMatrixTable, AppCardBusinessPlace, AppCardMatrixBusiness, AppBinarTree },
         props: {
             userData: Object,
             hideSensitive: Boolean
         },
         data() {
             return {
-                isTable: false
+                isTable: false,
+                matrix: null
+            }
+        },
+        async created() {
+            const matrix_response = await getMatrix(false, 5, localStorage.getItem('token'));
+            if (matrix_response) {
+                this.matrix = matrix_response;
             }
         },
         methods: {
